@@ -1,5 +1,39 @@
-
+This shows how to use a pytorch model in C++ in an Android app.
 
 Running this will require compiling pytorch for android and setting `TORCHPATH` in `app/src/main/cpp/CMakeLists.txt`.
 
-! Note the crash when removing https://github.com/RuABraun/android-with-pytorch/blob/master/app/src/main/cpp/native-lib.cpp#L57
+# NOTICE:
+
+Weird crash when removing https://github.com/RuABraun/android-with-pytorch/blob/master/app/src/main/cpp/native-lib.cpp#L57
+
+```
+E/libc++abi: terminating with uncaught exception of type torch::jit::script::ErrorReport:
+Unknown builtin op: aten::_adaptive_avg_pool2d_backward.
+    Could not find any similar ops to aten::_adaptive_avg_pool2d_backward. This op may not exist or may not be currently supported in TorchScript.
+```
+
+The model was created like this:
+
+```
+import torch as to
+import torch.nn as nn
+
+
+class Mod(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.fc = nn.Linear(3, 2)
+
+    def forward(self, x):
+        return self.fc(x)
+
+
+def main():
+    model = Mod()
+    x = to.rand(1, 3)
+    traced_module = to.jit.trace(model, x)
+
+    traced_module.save('traced_model.pt')
+
+main()
+```

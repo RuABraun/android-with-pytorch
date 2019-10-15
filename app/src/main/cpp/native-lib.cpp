@@ -4,6 +4,7 @@
 #include <string>
 #include <android/log.h>
 #include "torch/script.h"
+#include <iostream>
 
 extern "C" {
 
@@ -56,6 +57,9 @@ int run_model(std::string modeldir) {
     inputs.push_back(torch::ones({1, 3}));
     torch::autograd::AutoGradMode guard(false);
     at::Tensor output = module.forward(inputs).toTensor();
+    for(int i = 0; i < 2; i++) {
+        __android_log_print(ANDROID_LOG_INFO, "Bla", "%f", output.data<float>()[i]);
+    }
     return 0;
 }
 
