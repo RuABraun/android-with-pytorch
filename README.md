@@ -2,6 +2,7 @@ This shows how to use a pytorch model in C++ in an Android app.
 
 Running this will require compiling pytorch for android and setting `TORCHPATH` in `app/src/main/cpp/CMakeLists.txt`.
 
+Also requires `glog`: `sudo apt install libgoogle-glog-dev`
 
 The model was created like this:
 
